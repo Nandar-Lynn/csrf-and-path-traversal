@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBank - Transfer Funds</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: darkblue;
+        }
+        .navbar-brand, .nav-link {
+            color: #f0f2f5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">MyBank</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'download_statement' %}?statement=statement1.pdf" class="btn btn-primary">
+                        Download Statement
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Transfer Funds from {{ from_account.get_account_type_display }} Account</h1>
+        <p>Account Number: {{ from_account.account_number }}</p>
+        <p>Balance: ${{ from_account.balance }}</p>
+
+        <form method="POST">
+            {% comment %} {% csrf_token %} {% endcomment %}
+            <div class="form-group">
+                <label for="to_account">To Account:</label>
+                <input type="text" class="form-control" name="to_account" placeholder="Enter destination account" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="text" class="form-control" name="amount" placeholder="Enter amount" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Transfer</button>
+        </form>
+
+        {% if error %}
+            <p class="text-danger mt-3">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

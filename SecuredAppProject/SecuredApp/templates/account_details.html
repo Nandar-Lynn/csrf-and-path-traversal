@@ -1,0 +1,59 @@
+<!-- templates/account_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBank - Account Details</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: darkblue;
+        }
+        .navbar-brand, .nav-link
+        {
+            color: #f0f2f5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="{% url 'home' %}">MyBank</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'download_statement' %}?statement=statement1.pdf" class="btn btn-primary">
+                        Download Statement
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>{{ account.get_account_type_display }}</h1>
+        <p><strong>Account Number:</strong> {{ account.account_number }}</p>
+        <p><strong>Balance:</strong> ${{ account.balance }}</p>
+        <p><strong>Account Holder:</strong> {{ account.customer.user.first_name }} {{ account.customer.user.last_name }}</p>
+        <a href="{% url 'transfer_funds' account.id %}" class="btn btn-primary">Pay</a>
+        
+        <h3>Transactions</h3>
+        <ul class="list-group">
+            {% for transaction in transactions %}
+                <li class="list-group-item">
+                    <strong>{{ transaction.get_transaction_type_display }}:</strong> ${{ transaction.amount }}<br>
+                    <strong>Date:</strong> {{ transaction.timestamp }}<br>
+                    <strong>Description:</strong> {{ transaction.description }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
